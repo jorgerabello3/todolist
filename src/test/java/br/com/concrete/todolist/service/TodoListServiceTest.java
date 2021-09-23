@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,8 +63,9 @@ class TodoListServiceTest {
 
         List<Todo> allTodos = service.findAll();
 
-        assertNotNull(allTodos);
-        assertEquals(2, allTodos.size());
+        assertThat(allTodos).isNotNull();
+        assertThat(allTodos.size()).isEqualTo(2);
+
     }
 
     @Test
@@ -102,6 +104,7 @@ class TodoListServiceTest {
         assertThrows(TodoNotFoundException.class, () -> service.findById(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
     }
 
+
     @Test
     void GivenAnIdThatExistsInTheDatabaseWhenShouldUpdateDatabaseTodo() {
 
@@ -112,18 +115,34 @@ class TodoListServiceTest {
 
         Todo titleUpdate = service.updateById(titleFound);
 
-        assertEquals("New title", titleUpdate.getTitle());
 
+        assertEquals("New title", titleUpdate.getTitle());
     }
 
     @Test
-    void GivenAnIdThatExistsInTheDatabaseWhenShoulDeleteIdOfDatabaseTodo() {
+    void GivenAnIdForUpdateThatNotExistsInTheDatabaseWhenShouldThrowTodoNotException(){
+        service.save(leitura);
+        service.save(esportes);
+
+        assertThrows(TodoNotFoundException.class,() -> service.doesNotExistsIdToDoUpdate(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
+    }
+
+    @Test
+    void GivenAnIdThatExistsInTheDatabaseWhenShouldDeleteIdOfDatabaseTodo() {
         Todo savedTodo = service.save(leitura);
 
         Todo idFound = service.findById(savedTodo.getId());
-        Todo deletedDados = service.deleteById(idFound);
+        Todo deletedData= service.deleteById(idFound);
 
-        assertEquals(savedTodo.getId(), deletedDados.getId());
+        assertThat(deletedData).isNull();
+    }
+
+    @Test
+    void GivenAnIdForDeleteThatNotExistsInTheDatabaseWhenShouldThrowTodoNotException(){
+        service.save(leitura);
+        service.save(esportes);
+
+        assertThrows(TodoNotFoundException.class,() -> service.doesNotExistsIdForDelete(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
 
     }
 

@@ -14,5 +14,7 @@ public interface ITodoListRepository {
 
     Todo update(Todo todo);
 
-    Todo delete(Todo todo);
+    Todo delete(UUID id);
+
+
 }

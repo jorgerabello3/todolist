@@ -23,33 +23,29 @@ public class TodoListRepository implements ITodoListRepository {
     }
 
     @Override
-    public Todo findById(UUID id) {
-        for (Todo todo : todos) {
-            if (todo.getId().equals(id)) {
-                return todo;
-            }
-        }
-        return null;
+    public Todo findById(UUID uuid) {
+        return foundId(uuid);
     }
 
     @Override
     public Todo update(Todo todo) {
-        for (int i = 0; i < todos.size(); i++) {
-            if (todos.get(i).getId() == todo.getId()) {
-                todos.set(i, todo);
+        todos.remove(foundId(todo.getId()));
+        todos.add(todo);
+        return todos.get(todos.size()-1);
 
-                return todos.get(i);
-            }
-        }
-        return null;
+    }
+
+    @Override
+    public Todo delete(UUID id) {
+        todos.remove(foundId(id));
+        return foundId(id);
     }
 
 
-    @Override
-    public Todo delete(Todo todo) {
-        for (int i = 0; i < todos.size(); i++) {
-            if (todos.get(i).getId() == todo.getId()) {
-                return todos.remove(i);
+    public Todo foundId(UUID uuid) {
+        for (Todo todo : todos) {
+            if (todo.getId().equals(uuid)) {
+                return todo;
             }
         }
         return null;
