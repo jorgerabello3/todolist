@@ -35,19 +35,11 @@ public class TodoListService {
         return repository.delete(todo.getId());
     }
 
-    public void doesNotExistsIdToDoUpdate(UUID id) {
-        Todo todo = repository.foundId(id);
-        if (todo != null) {
-            return;
-        }
-        throw new TodoNotFoundException("Id informed not exists in the database");
-    }
 
-    public void doesNotExistsIdForDelete(UUID id) {
-        Todo todo = repository.delete(id);
-        if (todo != null) {
-            return;
+    public void doesNotExistsIdInTheDatabaseTodo(UUID uuid) {
+        Todo todo = repository.foundId(uuid);
+        if (todo == null) {
+            throw new TodoNotFoundException("Id informed not exists in the database");
         }
-        throw new TodoNotFoundException("Id informed not exists in the database");
     }
 }

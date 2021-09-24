@@ -124,7 +124,7 @@ class TodoListServiceTest {
         service.save(leitura);
         service.save(esportes);
 
-        assertThrows(TodoNotFoundException.class,() -> service.doesNotExistsIdToDoUpdate(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
+        assertThrows(TodoNotFoundException.class,() -> service.doesNotExistsIdInTheDatabaseTodo(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
     }
 
     @Test
@@ -142,7 +142,7 @@ class TodoListServiceTest {
         service.save(leitura);
         service.save(esportes);
 
-        assertThrows(TodoNotFoundException.class,() -> service.doesNotExistsIdForDelete(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
+        assertThrows(TodoNotFoundException.class,() -> service.doesNotExistsIdInTheDatabaseTodo(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
 
     }
 
