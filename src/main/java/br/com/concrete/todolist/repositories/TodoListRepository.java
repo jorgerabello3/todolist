@@ -43,11 +43,7 @@ public class TodoListRepository implements ITodoListRepository {
 
 
     public Todo foundId(UUID uuid) {
-        for (Todo todo : todos) {
-            if (todo.getId().equals(uuid)) {
-                return todo;
-            }
-        }
-        return null;
+        return todos.stream().filter(todo -> todo.getId().equals(uuid)).findFirst().orElse(null);
+
     }
 }

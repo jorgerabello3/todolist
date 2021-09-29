@@ -20,26 +20,24 @@ public class TodoListService {
     }
 
     public Todo findById(UUID id) {
-        Todo todo = repository.findById(id);
-        if (todo != null) {
-            return todo;
-        }
-        throw new TodoNotFoundException("Todo not found for id " + id);
+      return doesNotExistsIdInTheDatabaseTodo(id);
     }
 
     public Todo updateById(Todo todo) {
         return repository.update(todo);
     }
 
-    public Todo deleteById(Todo todo) {
-        return repository.delete(todo.getId());
+    public Todo deleteById(UUID uuid) {
+        doesNotExistsIdInTheDatabaseTodo(uuid);
+        return repository.delete(uuid);
     }
 
 
-    public void doesNotExistsIdInTheDatabaseTodo(UUID uuid) {
+    public Todo doesNotExistsIdInTheDatabaseTodo(UUID uuid) {
         Todo todo = repository.foundId(uuid);
         if (todo == null) {
             throw new TodoNotFoundException("Id informed not exists in the database");
         }
+        return todo;
     }
 }

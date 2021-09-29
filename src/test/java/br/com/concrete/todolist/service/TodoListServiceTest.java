@@ -120,11 +120,11 @@ class TodoListServiceTest {
     }
 
     @Test
-    void GivenAnIdForUpdateThatNotExistsInTheDatabaseWhenShouldThrowTodoNotException(){
+    void GivenAnIdForUpdateThatNotExistsInTheDatabaseWhenShouldThrowTodoNotException() {
         service.save(leitura);
         service.save(esportes);
 
-        assertThrows(TodoNotFoundException.class,() -> service.doesNotExistsIdInTheDatabaseTodo(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
+        assertThrows(TodoNotFoundException.class, () -> service.findById(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
     }
 
     @Test
@@ -132,17 +132,17 @@ class TodoListServiceTest {
         Todo savedTodo = service.save(leitura);
 
         Todo idFound = service.findById(savedTodo.getId());
-        Todo deletedData= service.deleteById(idFound);
+        Todo deletedData = service.deleteById(idFound.getId());
 
         assertThat(deletedData).isNull();
     }
 
     @Test
-    void GivenAnIdForDeleteThatNotExistsInTheDatabaseWhenShouldThrowTodoNotException(){
+    void GivenAnIdForDeleteThatNotExistsInTheDatabaseWhenShouldThrowTodoNotException() {
         service.save(leitura);
         service.save(esportes);
 
-        assertThrows(TodoNotFoundException.class,() -> service.doesNotExistsIdInTheDatabaseTodo(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
+        assertThrows(TodoNotFoundException.class, () -> service.deleteById(UUID.fromString("9dabaef0-0aa9-40d7-aa37-4ead13f1ea01")));
 
     }
 
