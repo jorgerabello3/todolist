@@ -1,20 +1,39 @@
 package br.com.concrete.todolist.models;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "todo")
 public class Todo {
-    private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private BigInteger id;
+
+    @Column(name = "title", columnDefinition = "VARCHAR", length = 128, nullable = false)
     private String title;
+
+    @Column(name = "description", columnDefinition = "VARCHAR", nullable = false)
     private String description;
+
+    @Column(name = "start_date")
     private LocalDate startDate;
+
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     public Todo() {
     }
 
-    public Todo(UUID id, String title, String description, LocalDate startDate, LocalDate endDate) {
+    public Todo(BigInteger id, String title, String description, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -22,7 +41,7 @@ public class Todo {
         this.endDate = endDate;
     }
 
-    public void setId(UUID id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -42,7 +61,7 @@ public class Todo {
         this.endDate = endDate;
     }
 
-    public UUID getId() {
+    public BigInteger getId() {
         return id;
     }
 
