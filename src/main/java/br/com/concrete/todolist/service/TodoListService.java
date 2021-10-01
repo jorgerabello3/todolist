@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,26 +21,27 @@ public class TodoListService {
         this.repository = repository;
     }
 
-//    public Todo save(Todo todo) {
-//        return repository.save(todo);
-//    }
+    public Todo save(Todo todo) {
+        return repository.save(todo);
+    }
 
-//    public List<Todo> findAll() {
-//        return repository.findAll();
-//    }
+    public List<Todo> findAll() {
+        return repository.findAll();
+    }
 
     public Todo findById(BigInteger id) {
         return doesNotExistsIdInTheDatabaseTodo(id);
     }
 
-//    public Todo updateById(Todo todo) {
-//        return repository.update(todo);
-//    }
+    public void updateById(Todo todo) {
+        repository.save(todo);
+    }
 
-//    public Todo deleteById(UUID uuid) {
-//        doesNotExistsIdInTheDatabaseTodo(uuid);
-//        return repository.delete(uuid);
-//    }
+    public Todo deleteById(BigInteger id) {
+        doesNotExistsIdInTheDatabaseTodo(id);
+        repository.deleteById(id);
+        return null;
+    }
 
 
     public Todo doesNotExistsIdInTheDatabaseTodo(BigInteger id) {
