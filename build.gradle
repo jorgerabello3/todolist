@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.5.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'jacoco'
 }
 group 'br.com.concrete'
 version '0.0.1-SNAPSHOT'
@@ -19,6 +20,27 @@ dependencies {
 
 
 }
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/coverage")
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+
+                    ]
+            )
+        }))
+    }
+}
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
 }
