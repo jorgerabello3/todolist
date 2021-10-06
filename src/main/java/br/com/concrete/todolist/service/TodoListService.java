@@ -2,7 +2,6 @@ package br.com.concrete.todolist.service;
 
 import br.com.concrete.todolist.errors.exception.TodoNotFoundException;
 import br.com.concrete.todolist.models.Todo;
-
 import br.com.concrete.todolist.repositories.TodoListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,14 +32,14 @@ public class TodoListService {
         return doesNotExistsIdInTheDatabaseTodo(id);
     }
 
-    public void updateById(Todo todo) {
-        repository.save(todo);
+    public Todo updateById(Todo todo) {
+       return repository.save(todo);
     }
 
-    public Todo deleteById(BigInteger id) {
+    public void deleteById(BigInteger id) {
         doesNotExistsIdInTheDatabaseTodo(id);
         repository.deleteById(id);
-        return null;
+
     }
 
 

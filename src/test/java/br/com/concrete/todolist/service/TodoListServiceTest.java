@@ -12,11 +12,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,6 +101,18 @@ class TodoListServiceTest {
 
     }
 
+    @Test
+    void GivenARequestToFindAllTodosWhenTryToRetrieveThenShouldReturnAnEmptyList() {
+
+        when(repository.findAll()).thenReturn(Collections.emptyList());
+
+        List<Todo> allTodos = service.findAll();
+
+        assertThat(allTodos).isEmpty();
+
+
+    }
+
 
     @Test
     void GivenANIdWhenTryToRetrieveATodoThenShouldReturnCorrectDataForATodo() {
@@ -121,6 +135,7 @@ class TodoListServiceTest {
 
     @Test
     void GivenAnIdThatExistsInTheDatabaseWhenShouldUpdateDatabaseTodo() {
+
 
         when(repository.findById(leitura.getId())).thenReturn(Optional.of(leitura));
 
@@ -145,10 +160,9 @@ class TodoListServiceTest {
     void GivenAnIdThatExistsInTheDatabaseWhenShouldDeleteIdOfDatabaseTodo() {
         when(repository.findById(esportes.getId())).thenReturn(Optional.of(esportes));
 
-        Todo idFound = service.findById(esportes.getId());
-        Todo deletedData = service.deleteById(idFound.getId());
+        service.deleteById(esportes.getId());
 
-        assertThat(deletedData).isNull();
+        verify(repository).deleteById(esportes.getId());
 
     }
 
