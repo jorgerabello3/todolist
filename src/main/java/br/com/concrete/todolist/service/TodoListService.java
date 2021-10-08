@@ -32,8 +32,9 @@ public class TodoListService {
         return doesNotExistsIdInTheDatabaseTodo(id);
     }
 
-    public Todo updateById(Todo todo) {
-       return repository.save(todo);
+    public void updateById(Todo todo) {
+        doesNotExistsIdInTheDatabaseTodo(todo.getId());
+        repository.save(todo);
     }
 
     public void deleteById(BigInteger id) {
