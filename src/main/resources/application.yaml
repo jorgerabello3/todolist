@@ -6,7 +6,7 @@ spring:
   application:
     name: todolist
   datasource:
-    url: jdbc:postgresql://localhost:5432/tododb
+    url: jdbc:postgresql://localhost:5432/tododb?createDatabaseIfNotExist=true
     username: root
     password: root
   jpa:
@@ -15,4 +15,4 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
