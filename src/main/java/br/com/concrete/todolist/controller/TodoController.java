@@ -4,6 +4,7 @@ import br.com.concrete.todolist.models.Todo;
 import br.com.concrete.todolist.service.TodoListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,32 +22,31 @@ public class TodoController {
 
 
     @GetMapping
-    public List<Todo> listAll() {
-        return todoListService.findAll();
+    public ResponseEntity<List<Todo>> listAll() {
+        return ResponseEntity.ok(todoListService.findAll());
     }
 
     @GetMapping(path = "/{id}")
-    public Todo findById(@PathVariable BigInteger id) {
-        return todoListService.findById(id);
+    public ResponseEntity<Todo> findById(@PathVariable BigInteger id) {
+        return ResponseEntity.ok(todoListService.findById(id));
     }
 
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Todo save(@Valid @RequestBody Todo todo) {
-        return todoListService.save(todo);
+    public ResponseEntity<Todo> save(@Valid @RequestBody Todo todo) {
+        return new ResponseEntity<>(todoListService.save(todo), HttpStatus.CREATED);
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Todo todo) {
+    public ResponseEntity<Void> update(@RequestBody Todo todo) {
         todoListService.updateById(todo);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable BigInteger id) {
+    public ResponseEntity<Void> delete(@PathVariable BigInteger id) {
         todoListService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

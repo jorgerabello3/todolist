@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigInteger;
@@ -64,7 +65,7 @@ class TodoControllerTest {
 
         when(service.findAll()).thenReturn(List.of(leitura, esportes));
 
-        List<Todo> allTodo = controller.listAll();
+        List<Todo> allTodo = controller.listAll().getBody();
 
         assertThat(allTodo).isNotNull();
         assertThat(allTodo).hasSize(2);
@@ -79,7 +80,7 @@ class TodoControllerTest {
 
         when(service.findAll()).thenReturn(Collections.emptyList());
 
-        List<Todo> allTodo = controller.listAll();
+        List<Todo> allTodo = controller.listAll().getBody();
 
         assertThat(allTodo).isEmpty();
 
@@ -89,7 +90,7 @@ class TodoControllerTest {
     void GivenAnIdWhenTryToRetrieveATodoThenShouldReturnCorrectDataForATodo() {
 
         when(service.findById(new BigInteger("1"))).thenReturn(leitura);
-        Todo localizeId = controller.findById(new BigInteger("1"));
+        Todo localizeId = controller.findById(new BigInteger("1")).getBody();
 
         assertThat(localizeId.getId()).isEqualTo(leitura.getId());
 
@@ -100,7 +101,7 @@ class TodoControllerTest {
     void GivenATodoForSaveThenShouldSaveAndReturnSavedTodoData() {
 
         when(service.save(leitura)).thenReturn(leitura);
-        Todo savedTodo = controller.save(leitura);
+        Todo  savedTodo = controller.save(leitura).getBody();
 
         assertThat(savedTodo).isNotNull();
         assertThat(savedTodo.getId()).isEqualTo(leitura.getId());
