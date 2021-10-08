@@ -1,88 +1,53 @@
 package br.com.concrete.todolist.models;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.UUID;
 
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@Entity
+@Table(name = "todo")
 public class Todo {
-    private UUID id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private BigInteger id;
+
+    @NotBlank(message ="The todo title can not is empty")
+    @Column(name = "title", columnDefinition = "VARCHAR", length = 128, nullable = false)
     private String title;
+
+    @NotBlank(message ="The todo title can not is empty")
+    @Column(name = "description", columnDefinition = "VARCHAR", nullable = false)
     private String description;
+
+    @Column(name = "start_date")
     private LocalDate startDate;
+
+    @Column(name = "end_date")
     private LocalDate endDate;
-
-    public Todo() {
-    }
-
-    public Todo(UUID id, String title, String description, LocalDate startDate, LocalDate endDate) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Todo todo = (Todo) o;
-        return Objects.equals(id, todo.id) && Objects.equals(title, todo.title) && Objects.equals(description, todo.description) && Objects.equals(startDate, todo.startDate) && Objects.equals(endDate, todo.endDate);
+        return Objects.equals(id, todo.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, startDate, endDate);
-    }
-
-    @Override
-    public String toString() {
-        return "Todo{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
+        return 0;
     }
 }
