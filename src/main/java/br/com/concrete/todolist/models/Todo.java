@@ -1,9 +1,13 @@
 package br.com.concrete.todolist.models;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -20,9 +24,11 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
 
+    @NotBlank(message ="The todo title can not is empty")
     @Column(name = "title", columnDefinition = "VARCHAR", length = 128, nullable = false)
     private String title;
 
+    @NotBlank(message ="The todo title can not is empty")
     @Column(name = "description", columnDefinition = "VARCHAR", nullable = false)
     private String description;
 
