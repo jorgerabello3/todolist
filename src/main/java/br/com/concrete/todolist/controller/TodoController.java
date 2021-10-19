@@ -1,6 +1,7 @@
 package br.com.concrete.todolist.controller;
 
 import br.com.concrete.todolist.models.Todo;
+import br.com.concrete.todolist.models.dtos.TodoDTO;
 import br.com.concrete.todolist.service.TodoListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,19 +28,19 @@ public class TodoController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Todo> findById(@PathVariable BigInteger id) {
+    public ResponseEntity<TodoDTO> findById(@PathVariable BigInteger id) {
         return ResponseEntity.ok(todoListService.findById(id));
     }
 
 
     @PostMapping
-    public ResponseEntity<Todo> save(@Valid @RequestBody Todo todo) {
-        return new ResponseEntity<>(todoListService.save(todo), HttpStatus.CREATED);
+    public ResponseEntity<TodoDTO> save(@Valid @RequestBody TodoDTO todoDTO) {
+        return new ResponseEntity<>(todoListService.save(todoDTO), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody Todo todo) {
-        todoListService.updateById(todo);
+    public ResponseEntity<Void> update(@RequestBody TodoDTO todoDTO) {
+        todoListService.updateById(todoDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -3,6 +3,7 @@ package br.com.concrete.todolist.service;
 import br.com.concrete.todolist.errors.exception.TodoBadRequestException;
 import br.com.concrete.todolist.errors.exception.TodoNotFoundException;
 import br.com.concrete.todolist.models.Todo;
+import br.com.concrete.todolist.models.dtos.TodoDTO;
 import br.com.concrete.todolist.repositories.TodoListRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -28,11 +30,16 @@ class TodoListServiceTest {
     @Mock
     private TodoListRepository repository;
 
+    @Mock
+    private ModelMapper modelMapper;
+
     @InjectMocks
     private TodoListService service;
 
     private LocalDate startDate;
     private LocalDate endDate;
+    private TodoDTO leituraDTO;
+    private TodoDTO esportesDTO;
     private Todo leitura;
     private Todo esportes;
 
@@ -42,28 +49,46 @@ class TodoListServiceTest {
         startDate = LocalDate.now();
         endDate = LocalDate.now();
 
-        leitura = new Todo();
+        leituraDTO = new TodoDTO();
 
+        leituraDTO.setId(new BigInteger("1"));
+        leituraDTO.setTitle("Leitura");
+        leituraDTO.setDescription("Ler livro sobre TDD");
+        leituraDTO.setStartDate(startDate);
+        leituraDTO.setEndDate(endDate);
+
+        leitura = new Todo();
         leitura.setId(new BigInteger("1"));
         leitura.setTitle("Leitura");
         leitura.setDescription("Ler livro sobre TDD");
         leitura.setStartDate(startDate);
         leitura.setEndDate(endDate);
 
-        esportes = new Todo();
+        esportesDTO = new TodoDTO();
 
+        esportesDTO.setId(new BigInteger("2"));
+        esportesDTO.setTitle("Esportes");
+        esportesDTO.setDescription("Praticar Muay Thai");
+        esportesDTO.setStartDate(startDate);
+        esportesDTO.setEndDate(endDate);
+
+        esportes = new Todo();
         esportes.setId(new BigInteger("2"));
         esportes.setTitle("Esportes");
         esportes.setDescription("Praticar Muay Thai");
         esportes.setStartDate(startDate);
         esportes.setEndDate(endDate);
+
     }
 
     @Test
     void GivenATodoWhenTryToSaveThenShouldSaveAndReturnSavedTodoData() {
 
+        when(modelMapper.map(leituraDTO,Todo.class)).thenReturn(leitura);
         when(repository.save(leitura)).thenReturn(leitura);
-        Todo savedTodo = service.save(leitura);
+        when(modelMapper.map(leitura,TodoDTO.class)).thenReturn(leituraDTO);
+
+        TodoDTO savedTodo = service.save(leituraDTO);
 
 
         assertThat(savedTodo).isNotNull();
@@ -119,7 +144,7 @@ class TodoListServiceTest {
     void GivenANIdWhenTryToRetrieveATodoThenShouldReturnCorrectDataForATodo() {
 
         when(repository.findById(new BigInteger("1"))).thenReturn(Optional.of(leitura));
-        Todo foundedTodo = service.findById(new BigInteger("1"));
+        TodoDTO foundedTodo = service.findById(new BigInteger("1"));
 
         assertThat(foundedTodo).isNotNull();
         assertThat(foundedTodo.getTitle()).isEqualTo("Leitura");
@@ -140,7 +165,7 @@ class TodoListServiceTest {
 
         when(repository.findById(leitura.getId())).thenReturn(Optional.of(leitura));
 
-        Todo foundTodo = service.findById(leitura.getId());
+        TodoDTO foundTodo = service.findById(leitura.getId());
 
         foundTodo.setTitle("New title");
 
@@ -189,7 +214,7 @@ class TodoListServiceTest {
 
         when(repository.findById(leitura.getId())).thenReturn(Optional.of(leitura));
 
-        assertThrows(TodoBadRequestException.class, () -> service.save(leitura));
+        assertThrows(TodoBadRequestException.class, () -> service.save(leituraDTO));
     }
 }
 
