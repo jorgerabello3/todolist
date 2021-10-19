@@ -5,15 +5,19 @@ import br.com.concrete.todolist.service.TodoListService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.swing.text.html.Option;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -89,19 +93,25 @@ class TodoControllerTest {
     @Test
     void GivenAnIdWhenTryToRetrieveATodoThenShouldReturnCorrectDataForATodo() {
 
-        when(service.findById(new BigInteger("1"))).thenReturn(leitura);
+        when(service.findById(ArgumentMatchers.any())).thenReturn(leitura);
+
+        BigInteger expectedId = leitura.getId();
+
         Todo localizeId = controller.findById(new BigInteger("1")).getBody();
 
-        assertThat(localizeId.getId()).isEqualTo(leitura.getId());
+        assertThat(localizeId).isNotNull();
+
+        assertThat(localizeId.getId()).isEqualTo(expectedId);
 
     }
+
 
 
     @Test
     void GivenATodoForSaveThenShouldSaveAndReturnSavedTodoData() {
 
         when(service.save(leitura)).thenReturn(leitura);
-        Todo  savedTodo = controller.save(leitura).getBody();
+        Todo savedTodo = controller.save(leitura).getBody();
 
         assertThat(savedTodo).isNotNull();
         assertThat(savedTodo.getId()).isEqualTo(leitura.getId());
@@ -126,11 +136,17 @@ class TodoControllerTest {
 
     @Test
     void GivenAIdForDeleteThatExistWhenShouldDeleteTodo() {
-        when(service.findById(leitura.getId())).thenReturn(leitura);
 
-        controller.delete(leitura.getId());
+        when(service.save(esportes)).thenReturn(esportes);
 
-        verify(service).deleteById(leitura.getId());
+        Todo todoSave = service.save(esportes);
+
+        service.deleteById(todoSave.getId());
+
+        Todo todoDeleted = service.findById(todoSave.getId());
+
+        verify(service).deleteById(esportes.getId());
+        assertThat(todoDeleted).isNull();
     }
 
 }

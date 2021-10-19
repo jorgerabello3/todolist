@@ -1,5 +1,6 @@
 package br.com.concrete.todolist.service;
 
+import br.com.concrete.todolist.errors.exception.TodoBadRequestException;
 import br.com.concrete.todolist.errors.exception.TodoNotFoundException;
 import br.com.concrete.todolist.models.Todo;
 import br.com.concrete.todolist.repositories.TodoListRepository;
@@ -174,5 +175,22 @@ class TodoListServiceTest {
         assertThrows(TodoNotFoundException.class, () -> service.deleteById(new BigInteger("3")));
 
     }
+
+    @Test
+    void GivenAnIdForSaveThatItIsNullWhenShouldReturnSaveDatabaseTodo() {
+
+        boolean ValidateId = service.validIdForSave(null);
+
+        assertThat(ValidateId).isTrue();
+    }
+
+    @Test
+    void GivenAnIdForSaveThatExistsWhenShouldReturnTodoBadRequestException() {
+
+        when(repository.findById(leitura.getId())).thenReturn(Optional.of(leitura));
+
+        assertThrows(TodoBadRequestException.class, () -> service.save(leitura));
+    }
 }
+
 

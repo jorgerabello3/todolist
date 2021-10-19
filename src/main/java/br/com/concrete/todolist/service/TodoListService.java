@@ -1,5 +1,6 @@
 package br.com.concrete.todolist.service;
 
+import br.com.concrete.todolist.errors.exception.TodoBadRequestException;
 import br.com.concrete.todolist.errors.exception.TodoNotFoundException;
 import br.com.concrete.todolist.models.Todo;
 import br.com.concrete.todolist.repositories.TodoListRepository;
@@ -21,7 +22,10 @@ public class TodoListService {
     }
 
     public Todo save(Todo todo) {
-        return repository.save(todo);
+        if (validIdForSave(todo.getId())) {
+            return repository.save(todo);
+        }
+        throw new TodoBadRequestException("The Todo id " + todo.getId() + " Id informed exists save in the database, increment id automatic");
     }
 
     public List<Todo> findAll() {
@@ -47,5 +51,13 @@ public class TodoListService {
     public Todo doesNotExistsIdInTheDatabaseTodo(BigInteger id) {
         Optional<Todo> optionalTodo = repository.findById(id);
         return optionalTodo.orElseThrow(() -> new TodoNotFoundException("Todo not found for id " + id));
+    }
+
+    public boolean validIdForSave(BigInteger id) {
+        if (id == null) {
+            return true;
+        }
+        Optional<Todo> optionalTodo = repository.findById(id);
+        return optionalTodo.isEmpty();
     }
 }

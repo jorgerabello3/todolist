@@ -1,5 +1,6 @@
 package br.com.concrete.todolist.exception.handler;
 
+import br.com.concrete.todolist.errors.exception.TodoBadRequestException;
 import br.com.concrete.todolist.errors.exception.TodoExceptionDetails;
 import br.com.concrete.todolist.errors.exception.TodoNotFoundException;
 import br.com.concrete.todolist.errors.exception.TodoValidationExceptionDetails;
@@ -52,6 +53,18 @@ public class TodoExceptionHandler extends ResponseEntityExceptionHandler {
                 .fields(fields)
                 .fieldsMessage(fieldsMessage)
                 .build(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TodoBadRequestException.class)
+    public ResponseEntity<TodoExceptionDetails> handleTodoBadRequestException(TodoBadRequestException todoBadRequestException) {
+        return new ResponseEntity<>(
+                TodoExceptionDetails.builder()
+                        .title("Bad Request Excepton, Check the Documentation")
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .details(todoBadRequestException.getMessage())
+                        .developerMessage(todoBadRequestException.getClass().getName())
+                        .build(), HttpStatus.BAD_REQUEST);
     }
 
 }

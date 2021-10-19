@@ -1,9 +1,6 @@
 package br.com.concrete.todolist.models;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -12,10 +9,12 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Builder
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "todo")
 public class Todo {
