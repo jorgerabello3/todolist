@@ -26,7 +26,7 @@ public class TodoListService {
         Todo todo = modelMapper.map(todoDTO, Todo.class);
         if (validIdForSave(todo.getId())) {
             Todo saveTodo = repository.save(todo);
-            return modelMapper.map(saveTodo,TodoDTO.class);
+            return modelMapper.map(saveTodo, TodoDTO.class);
         }
         throw new TodoBadRequestException("The Todo id " + todo.getId() + " Id informed exists save in the database, increment id automatic");
     }
@@ -36,7 +36,7 @@ public class TodoListService {
     }
 
     public TodoDTO findById(BigInteger id) {
-         return doesNotExistsIdInTheDatabaseTodo(id);
+        return doesNotExistsIdInTheDatabaseTodo(id);
     }
 
     public void updateById(TodoDTO todoDTO) {
@@ -56,7 +56,7 @@ public class TodoListService {
         Optional<Todo> optionalTodo = repository.findById(id);
         Todo todo = optionalTodo.orElseThrow(() -> new TodoNotFoundException("Todo not found for id " + id));
 
-        return modelMapper.map(todo,TodoDTO.class);
+        return modelMapper.map(todo, TodoDTO.class);
     }
 
     public boolean validIdForSave(BigInteger id) {

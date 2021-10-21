@@ -84,9 +84,9 @@ class TodoListServiceTest {
     @Test
     void GivenATodoWhenTryToSaveThenShouldSaveAndReturnSavedTodoData() {
 
-        when(modelMapper.map(leituraDTO,Todo.class)).thenReturn(leitura);
+        when(modelMapper.map(leituraDTO, Todo.class)).thenReturn(leitura);
         when(repository.save(leitura)).thenReturn(leitura);
-        when(modelMapper.map(leitura,TodoDTO.class)).thenReturn(leituraDTO);
+        when(modelMapper.map(leitura, TodoDTO.class)).thenReturn(leituraDTO);
 
         TodoDTO savedTodo = service.save(leituraDTO);
 
@@ -143,7 +143,10 @@ class TodoListServiceTest {
     @Test
     void GivenANIdWhenTryToRetrieveATodoThenShouldReturnCorrectDataForATodo() {
 
+
         when(repository.findById(new BigInteger("1"))).thenReturn(Optional.of(leitura));
+        when(modelMapper.map(leitura, TodoDTO.class)).thenReturn(leituraDTO);
+
         TodoDTO foundedTodo = service.findById(new BigInteger("1"));
 
         assertThat(foundedTodo).isNotNull();
@@ -163,7 +166,9 @@ class TodoListServiceTest {
     void GivenAnIdThatExistsInTheDatabaseWhenShouldUpdateDatabaseTodo() {
 
 
+        when(modelMapper.map(leitura, TodoDTO.class)).thenReturn(leituraDTO);
         when(repository.findById(leitura.getId())).thenReturn(Optional.of(leitura));
+        when(modelMapper.map(leituraDTO, Todo.class)).thenReturn(leitura);
 
         TodoDTO foundTodo = service.findById(leitura.getId());
 
@@ -171,7 +176,7 @@ class TodoListServiceTest {
 
         service.updateById(foundTodo);
 
-        assertThat(leitura.getTitle()).isEqualTo("New title");
+        assertThat(leituraDTO.getTitle()).isEqualTo("New title");
     }
 
 
@@ -213,6 +218,7 @@ class TodoListServiceTest {
     void GivenAnIdForSaveThatExistsWhenShouldReturnTodoBadRequestException() {
 
         when(repository.findById(leitura.getId())).thenReturn(Optional.of(leitura));
+        when(modelMapper.map(leituraDTO, Todo.class)).thenReturn(leitura);
 
         assertThrows(TodoBadRequestException.class, () -> service.save(leituraDTO));
     }

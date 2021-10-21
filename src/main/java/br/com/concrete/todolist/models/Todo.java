@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import java.util.Objects;
 @Table(name = "todo")
 public class Todo {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
@@ -30,6 +32,7 @@ public class Todo {
     @NotBlank(message ="The todo title can not is empty")
     @Column(name = "description", columnDefinition = "VARCHAR", nullable = false)
     private String description;
+
 
     @Column(name = "start_date")
     private LocalDate startDate;

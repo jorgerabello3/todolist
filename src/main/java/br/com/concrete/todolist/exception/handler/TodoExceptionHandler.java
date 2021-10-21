@@ -4,9 +4,11 @@ import br.com.concrete.todolist.errors.exception.TodoBadRequestException;
 import br.com.concrete.todolist.errors.exception.TodoExceptionDetails;
 import br.com.concrete.todolist.errors.exception.TodoNotFoundException;
 import br.com.concrete.todolist.errors.exception.TodoValidationExceptionDetails;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,7 +27,7 @@ public class TodoExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<TodoExceptionDetails> handleTodoNotFoundException(TodoNotFoundException todoNotFoundException) {
         return new ResponseEntity<>(
                 TodoExceptionDetails.builder()
-                        .title("Bad Request Excepton, Check the Documentation")
+                        .title("Not found Excepton, Check the Documentation")
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.NOT_FOUND.value())
                         .details(todoNotFoundException.getMessage())
@@ -67,4 +69,28 @@ public class TodoExceptionHandler extends ResponseEntityExceptionHandler {
                         .build(), HttpStatus.BAD_REQUEST);
     }
 
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        TodoExceptionDetails exceptionDetails = TodoExceptionDetails.builder()
+                .timestamp(LocalDateTime.now())
+                .status(status.value())
+                .title("Bad Request Excepton, Check the Documentation")
+                .details("id cannot contain letter, find id just type number")
+                .developerMessage(ex.getClass().getName())
+                .build();
+        return new ResponseEntity<>(exceptionDetails, headers, status);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        TodoExceptionDetails exceptionDetails = TodoExceptionDetails.builder()
+                .timestamp(LocalDateTime.now())
+                .status(status.value())
+                .title("Bad Request Excepton, Check the Documentation")
+                .details("Date format invalid ")
+                .developerMessage(ex.getClass().getName())
+                .build();
+        return new ResponseEntity<>(exceptionDetails, headers, status);
+    }
 }
