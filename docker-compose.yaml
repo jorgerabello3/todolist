@@ -1,14 +1,14 @@
 version: '3.1'
-networks:
-  todonetwork:
-    driver: bridge
+#networks:
+#  todonetwork:
+#    driver: bridge
 
 services:
   database:
     image: postgres:9-alpine
-    restart: always
-    networks:
-      - todonetwork
+#    restart: always
+#    networks:
+#      - todonetwork
     container_name: dbserver
     environment:
       POSTGRES_USER: root
@@ -18,16 +18,18 @@ services:
       - "5432:5432"
     volumes:
       - tododb_data:/var/lib/postgresql/data
-  todoapi:
-    build:
-      context: .
-    container_name: todoapi
-    networks:
-      - todonetwork
-    ports:
-      - "8080:8080"
-    restart: always
-    depends_on:
-      - database
+#  todoapi:
+#    build:
+#      context: .
+#    container_name: todoapi
+#    networks:
+#      - todonetwork
+#    ports:
+#      - "8080:8080"
+#    env_file:
+#      - .env
+#    restart: always
+#    depends_on:
+#      - database
 volumes:
   tododb_data:
