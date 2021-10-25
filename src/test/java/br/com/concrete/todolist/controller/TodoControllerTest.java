@@ -152,7 +152,7 @@ class TodoControllerTest {
 
         TodoDTO todoSave = service.save(esportesDTO);
 
-        service.deleteById(todoSave.getId());
+        controller.delete(todoSave.getId());
 
         TodoDTO todoDeleted = service.findById(todoSave.getId());
 
