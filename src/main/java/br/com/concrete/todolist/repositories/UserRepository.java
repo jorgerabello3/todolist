@@ -8,8 +8,10 @@ import java.math.BigInteger;
 import java.util.List;
 
 @Repository
-public interface UsersRepository extends JpaRepository<User, BigInteger> {
+public interface UserRepository extends JpaRepository<User, BigInteger> {
 
-    List<User> findByName(String firstName);
+    List<User> findByFirstName(String firstName);
+    List<User> findByCpf(String cpf);
+
 }
 
