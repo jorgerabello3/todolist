@@ -21,6 +21,7 @@ dependencies {
     implementation 'org.modelmapper:modelmapper:2.4.4'
     implementation 'org.springdoc:springdoc-openapi-ui:1.4.8'
     implementation 'org.springdoc:springdoc-openapi-data-rest:1.4.8'
+    implementation 'org.springframework.security:spring-security-crypto:5.5.2'
 
 }
 jacocoTestReport {
