@@ -1,5 +1,6 @@
 package br.com.concrete.todolist.service;
 
+import br.com.concrete.todolist.errors.exception.UserBadRequestException;
 import br.com.concrete.todolist.errors.exception.UserNotFoundException;
 import br.com.concrete.todolist.models.User;
 import br.com.concrete.todolist.repositories.UserRepository;
@@ -7,6 +8,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +21,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -110,20 +113,20 @@ class UserTest {
 
     @Test
     void GivenANameThatExistThenShouldReturnCorrectDataOfUser() {
-        when(userRepository.findByName(people1.getFirstName())).thenReturn(List.of(people1));
+        when(userRepository.findByFirstName(people1.getFirstName())).thenReturn(List.of(people1));
 
-        User userServiceByName = userService.findByName("Rodrigo");
+        User userServiceByName = userService.findByFirstName("Rodrigo");
 
         assertThat(userServiceByName).isNotNull();
         assertThat(userServiceByName.getFirstName()).isEqualTo(people1.getFirstName());
-        Assertions.assertThatCode(() -> userService.findByName(people1.getFirstName())).doesNotThrowAnyException();
+        Assertions.assertThatCode(() -> userService.findByFirstName(people1.getFirstName())).doesNotThrowAnyException();
     }
 
     @Test
     void GivenANameThatNotExistInTheDatabaseThenShouldThrowNotFoundException() {
-        when(userRepository.findByName("Ryan")).thenReturn(Collections.emptyList());
+        when(userRepository.findByFirstName("Ryan")).thenReturn(Collections.emptyList());
 
-        assertThrows(UserNotFoundException.class, () -> userService.findByName("Ryan"));
+        assertThrows(UserNotFoundException.class, () -> userService.findByFirstName("Ryan"));
 
     }
 
@@ -160,11 +163,43 @@ class UserTest {
     }
 
     @Test
-    void GivenAnIdForDeleteThatNotExistThenShouldThrowUserNotFoundException(){
+    void GivenAnIdForDeleteThatNotExistThenShouldThrowUserNotFoundException() {
         when(userRepository.findById(new BigInteger("3"))).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, ()->userService.findById(new BigInteger("3")));
+        assertThrows(UserNotFoundException.class, () -> userService.findById(new BigInteger("3")));
+    }
+
+    @Test
+    void GivenAnIdForSaveThatExistsThenShouldReturnUserBadRequestException() {
+        when(userRepository.findById(people1.getId())).thenReturn(Optional.of(people1));
+
+        assertThrows(UserBadRequestException.class, () -> userService.save(people1));
+    }
+
+    @Test
+    void GivenAnIdForSaveThatItIsNullThenShouldReturnSaveDatabaseUser() {
+        boolean validateId = userService.validIdForSave(null);
+
+        assertThat(validateId).isTrue();
+    }
+
+    @Test
+    void GivenAnCpfThatExistInTheDatabaseThenShouldReturnCpfExisted() {
+        boolean existCpf = userService.existCpfInTheDatabaseSave(people1.getCpf());
+
+        assertThat(existCpf).isTrue();
+
+
+    }
+
+    @Test
+    void GivenAnCpfForSaveThatExistsThenShouldReturnUserBadRequestException() {
+        when(userRepository.findByCpf(people1.getCpf())).thenReturn(List.of(people1));
+
+        assertThrows(UserBadRequestException.class, () -> userService.save(people1));
     }
 
 
 }
+
+
