@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<User>> listAll() {
@@ -28,16 +29,17 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user) {
+    public ResponseEntity<User> save(@Valid @RequestBody User user) {
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody User user) {
+    public ResponseEntity<Void> update(@Valid @RequestBody User user) {
         userService.updateById(user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable BigInteger id) {
         userService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -45,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<User> findByName(@RequestParam String firstName) {
-        return  ResponseEntity.ok(userService.findByName(firstName));
+    public ResponseEntity<User> findByFirstName(@RequestParam String firstName) {
+        return  ResponseEntity.ok(userService.findByFirstName(firstName));
     }
 }
