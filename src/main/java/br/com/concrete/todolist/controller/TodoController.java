@@ -1,6 +1,6 @@
 package br.com.concrete.todolist.controller;
 
-import br.com.concrete.todolist.errors.exception.TodoExceptionDetails;
+import br.com.concrete.todolist.errors.exception.ExceptionDetails;
 import br.com.concrete.todolist.models.Todo;
 import br.com.concrete.todolist.models.dtos.TodoDTO;
 import br.com.concrete.todolist.service.TodoListService;
@@ -50,7 +50,7 @@ public class TodoController {
     @Operation(summary = "Save Todo", description = "Save Todo new database" /*, tags = {"todos"}*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Todo registration success"),
-            @ApiResponse(responseCode = "400", description = "Failure registration Todo", content = @Content(schema = @Schema(implementation = TodoExceptionDetails.class)))
+            @ApiResponse(responseCode = "400", description = "Failure registration Todo", content = @Content(schema = @Schema(implementation = ExceptionDetails.class)))
     })
     public ResponseEntity<TodoDTO> save(@Valid @RequestBody TodoDTO todoDTO) {
         return new ResponseEntity<>(todoListService.save(todoDTO), HttpStatus.CREATED);

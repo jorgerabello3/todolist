@@ -1,9 +1,9 @@
 package br.com.concrete.todolist.exception.handler;
 
+import br.com.concrete.todolist.errors.exception.ExceptionDetails;
 import br.com.concrete.todolist.errors.exception.TodoBadRequestException;
-import br.com.concrete.todolist.errors.exception.TodoExceptionDetails;
 import br.com.concrete.todolist.errors.exception.TodoNotFoundException;
-import br.com.concrete.todolist.errors.exception.TodoValidationExceptionDetails;
+import br.com.concrete.todolist.errors.exception.ValidationExceptionDetails;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
 public class TodoExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(TodoNotFoundException.class)
-    public ResponseEntity<TodoExceptionDetails> handleTodoNotFoundException(TodoNotFoundException todoNotFoundException) {
+    public ResponseEntity<ExceptionDetails> handleTodoNotFoundException(TodoNotFoundException todoNotFoundException) {
         return new ResponseEntity<>(
-                TodoExceptionDetails.builder()
+                ExceptionDetails.builder()
                         .title("Not found Excepton, Check the Documentation")
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.NOT_FOUND.value())
@@ -46,7 +46,7 @@ public class TodoExceptionHandler extends ResponseEntityExceptionHandler {
         String fieldsMessage = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", "));
 
 
-        return new ResponseEntity<>(TodoValidationExceptionDetails.builder().title("Bad Request Excepton, Check the Documentation")
+        return new ResponseEntity<>(ValidationExceptionDetails.builder().title("Bad Request Excepton, Check the Documentation")
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .title("Bad Request Exception, Invalid fields")
@@ -58,9 +58,9 @@ public class TodoExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(TodoBadRequestException.class)
-    public ResponseEntity<TodoExceptionDetails> handleTodoBadRequestException(TodoBadRequestException todoBadRequestException) {
+    public ResponseEntity<ExceptionDetails> handleTodoBadRequestException(TodoBadRequestException todoBadRequestException) {
         return new ResponseEntity<>(
-                TodoExceptionDetails.builder()
+                ExceptionDetails.builder()
                         .title("Bad Request Excepton, Check the Documentation")
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.BAD_REQUEST.value())
@@ -72,7 +72,7 @@ public class TodoExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        TodoExceptionDetails exceptionDetails = TodoExceptionDetails.builder()
+        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
                 .timestamp(LocalDateTime.now())
                 .status(status.value())
                 .title("Bad Request Excepton, Check the Documentation")
@@ -84,7 +84,7 @@ public class TodoExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        TodoExceptionDetails exceptionDetails = TodoExceptionDetails.builder()
+        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
                 .timestamp(LocalDateTime.now())
                 .status(status.value())
                 .title("Bad Request Excepton, Check the Documentation")

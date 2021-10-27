@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
-public class TodoExceptionDetails {
+public class ExceptionDetails {
 
     protected String title;
     protected int status;
