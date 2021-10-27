@@ -138,9 +138,9 @@ class UserControllerTest {
 
     @Test
     void GivenARequestFindNameThatExistInTheDatabaseThenShouldReturnCorrectDataUser() {
-        when(userService.findByName(people1.getFirstName())).thenReturn(people1);
+        when(userService.findByFirstName(people1.getFirstName())).thenReturn(people1);
 
-        User userByName = userController.findByName(people1.getFirstName()).getBody();
+        User userByName = userController.findByFirstName(people1.getFirstName()).getBody();
 
         assertThat(userByName).isNotNull();
         assertThat(userByName.getId()).isEqualTo(people1.getId());
